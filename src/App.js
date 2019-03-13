@@ -13,6 +13,9 @@ class App extends Component {
     topScore: 0
   };
 
+  componentDidMount() {
+    this.setState({ cats: this.shuffle(this.state.cats) });
+  };
   correctGuess = catsChanged => {
     const {score, topScore} = this.state;
     const newScore = score + 1;
