@@ -10,7 +10,9 @@ class App extends Component {
   state = {
     cats,
     score: 0,
-    topScore: 0
+    topScore: 0,
+    clickedCats: [],
+    middleMessage: ""
   };
 
   componentDidMount() {
@@ -20,40 +22,55 @@ class App extends Component {
     const {score, topScore} = this.state;
     const newScore = score + 1;
     const newTopScore = Math.max(newScore, topScore);
-
+    console.log("correct guess", catsChanged)
     this.setState({
-      data: this.shuffle(catsChanged),
+      middleMessage: "Correct!",
       score: newScore,
       topScore: newTopScore
     });
+    this.handleShuffle();
   };
 
-  incorrectGuess = cats => {
-    this.setState({
-      cats: this.resetGame(cats),
-      score: 0
-    });
-  };
+  // incorrectGuess = cats => {
+  //   this.setState({
+  //     cats: this.resetCats(cats),
+  //     score: 0
+  //   });
+  // };
 
   changeClickedState = id => {
-    console.log('hi i was clicked ==>')
-    let guessRight = false;
-    const newCats = this.state.cats.map(item => {
-      const newItem  = {...item};
-      if (newItem.id === id) {
-        if(!newItem.clicked) {
-          newItem.clicked = true;
-          guessRight = true;
-        };
-      };
-      return newItem;
-    });
-    guessRight ? this.correctGuess(newCats) : this.incorrectGuess(newCats);
+    if (this.state.clickedCats.indexOf(id) === -1) {
+      this.correctGuess();
+      this.setState({clickedCats: this.state.clickedCats.concat(id)})
+    } else {
+      this.resetCats();
+    }
+    // let guessRight = false;
+    // const newCats = this.state.cats.map(item => {
+    //   const newItem  = {...item};
+      
+    //   if (newItem.id === id) {
+    //     if(!newItem.clicked) {
+    //       console.log('hi i was clicked ==>', newItem.clicked)
+    //       newItem.clicked = true;
+    //       guessRight = true;
+    //     };
+    //   };
+    //   return newItem;
+    // });
+    // guessRight ? this.correctGuess(newCats) : this.incorrectGuess(newCats);
   };
 
-  resetGame = (cats) => {
-    const resetGame = cats.map(item => ({ ...item, clicked: false}));
-    return this.shuffle(resetGame);
+  resetCats = () => {
+    this.setState({
+      clickedCats: [],
+      topScore: this.topScore,
+      score: 0,
+      middleMessage: "Incorrect! Please Start Over"
+    })
+    this.handleShuffle();
+    // const resetCats = cats.map(item => ({ ...item, clicked: false}));
+    // return this.shuffle(resetCats);
   };
 
   shuffle = data => {
@@ -66,7 +83,7 @@ class App extends Component {
       i--;
     }
     return data;
-
+    // this.setState({ cats:cats})
   // shuffle = () => {
   //   let i = this.length, j, temp;
   //   while (--i > 0) {
@@ -78,17 +95,23 @@ class App extends Component {
   //   return this;
   };
 
+  handleShuffle = () => {
+    let shuffledCats = this.shuffle(cats);
+    this.setState({ cats: shuffledCats});
+  };
+
   render() {
     // console.log('state from App Component =>', this.state)
     const { cats } = this.state
     console.log("2", this.state.score)
     return (
       <Wrapper>
-        <Navbar resetGame={this.state.resetGame} score={this.state.score} topScore={this.state.topScore}/>
+        <Navbar resetCats={this.state.resetCats} score={this.state.score} topScore={this.state.topScore} middleMessage={this.state.middleMessage}/>
         {cats.map(cat => (
           <Cards
             key={cat.id}
             changeClickedState={this.changeClickedState}
+            shuffle={this.shuffle}
             id={cat.id}
             clicked={cat.clicked}
             image={cat.image}
