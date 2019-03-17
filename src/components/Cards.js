@@ -7,9 +7,10 @@ const handleClick = props => {
 }
 // const Cards = ({changeClickedState, shuffle, name, image, id}) => (
 const Cards = (props) => (
-    <div className="container">
-        <div className="row justify-content-md-center">
-            <div className="col-2 col-s-6">
+    // <div className="container">
+        // {/* <div className="row"> */}
+        // <div className="justify-content-md-center">
+             
                 <div className="card">
                     <div className="img-container">
                         <img alt={props.name} src={props.image} onClick={() => {
@@ -18,9 +19,9 @@ const Cards = (props) => (
                         } />
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            
+        // </div> 
+        
 )
 
 export default Cards;

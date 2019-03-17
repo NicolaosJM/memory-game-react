@@ -8,7 +8,7 @@ function Navbar(props) {
           <div className="container">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <button onClick={props.resetCats}>restart</button>
+                <button onClick={props.resetCats}>Restart</button>
 
               </li>
               <li className="nav-item center">
